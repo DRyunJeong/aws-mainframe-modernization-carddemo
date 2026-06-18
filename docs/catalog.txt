@@ -1,0 +1,112 @@
+# CardDemo 문서 카탈로그 (CardDemo Documentation Catalog)
+# 생성일: 2026-06-18
+# 총 항목 수: 99 (CBL 31 / CPY 30 / JCL 38)
+# 형식: 기술ID | 유형 | 읽기 쉬운 한글 이름 | 문서경로
+# 유형: CBL-online=CICS 온라인 COBOL, CBL-batch=배치 COBOL, CPY=Copybook, JCL=배치 잡 JCL
+# 정렬: CBL → CPY → JCL, 각 그룹 내 기술ID 알파벳 순
+# ============================================================================
+
+# ---- COBOL 프로그램 (CBL) : 31개 ----
+CBACT01C | CBL-batch  | 계정 파일 순차 읽기 및 다출력 파일 쓰기 배치              | docs/cbl/CBACT01C.md
+CBACT02C | CBL-batch  | 카드 파일 순차 읽기 및 출력 배치                          | docs/cbl/CBACT02C.md
+CBACT03C | CBL-batch  | 카드-계좌 교차참조 파일 순차 출력 배치                    | docs/cbl/CBACT03C.md
+CBACT04C | CBL-batch  | 이자 계산 배치 프로그램 (Interest Calculator)            | docs/cbl/CBACT04C.md
+CBCUS01C | CBL-batch  | 고객 파일 순차 읽기 및 출력 배치                          | docs/cbl/CBCUS01C.md
+CBEXPORT | CBL-batch  | 고객 데이터 추출 배치 (지점 마이그레이션용 Export)        | docs/cbl/CBEXPORT.md
+CBIMPORT | CBL-batch  | 지점 마이그레이션 고객 데이터 가져오기 배치              | docs/cbl/CBIMPORT.md
+CBSTM03A | CBL-batch  | 계좌 명세서 생성 배치 (드라이버/포매터)                  | docs/cbl/CBSTM03A.md
+CBSTM03B | CBL-batch  | 명세서 생성용 범용 파일 I/O 서브루틴                      | docs/cbl/CBSTM03B.md
+CBTRN01C | CBL-batch  | 일일 거래 파일 포스팅 (검증 단계)                        | docs/cbl/CBTRN01C.md
+CBTRN02C | CBL-batch  | 일일 거래 입력(Posting) 배치                              | docs/cbl/CBTRN02C.md
+CBTRN03C | CBL-batch  | 거래 상세 리포트 출력 배치                                | docs/cbl/CBTRN03C.md
+COACTUPC | CBL-online | 계정 정보 수정 (Account Update) 온라인 화면              | docs/cbl/COACTUPC.md
+COACTVWC | CBL-online | 계정 상세 조회 화면                                        | docs/cbl/COACTVWC.md
+COADM01C | CBL-online | 관리자 메뉴 (Admin Menu)                                  | docs/cbl/COADM01C.md
+COBIL00C | CBL-online | 청구서 결제 (Bill Payment) 온라인 화면                    | docs/cbl/COBIL00C.md
+COBSWAIT | CBL-batch  | 배치 대기 유틸리티 (센티초 단위 슬립)                    | docs/cbl/COBSWAIT.md
+COCRDLIC | CBL-online | 신용카드 목록 조회 화면                                    | docs/cbl/COCRDLIC.md
+COCRDSLC | CBL-online | 신용카드 상세 조회 화면 (카드 단건 검색)                  | docs/cbl/COCRDSLC.md
+COCRDUPC | CBL-online | 신용카드 상세 수정 (Credit Card Update)                  | docs/cbl/COCRDUPC.md
+COMEN01C | CBL-online | 일반 사용자 메인 메뉴                                      | docs/cbl/COMEN01C.md
+CORPT00C | CBL-online | 거래 리포트 출력 요청 (CICS 온라인 JCL 제출)            | docs/cbl/CORPT00C.md
+COSGN00C | CBL-online | 사용자 로그인 화면 (CardDemo Signon)                      | docs/cbl/COSGN00C.md
+COTRN00C | CBL-online | 거래 목록 조회 (Transaction List)                        | docs/cbl/COTRN00C.md
+COTRN01C | CBL-online | 거래 상세 조회 (단건 View)                                | docs/cbl/COTRN01C.md
+COTRN02C | CBL-online | 거래 추가 화면 (Add Transaction)                          | docs/cbl/COTRN02C.md
+COUSR00C | CBL-online | 사용자 목록 조회 (페이지네이션)                          | docs/cbl/COUSR00C.md
+COUSR01C | CBL-online | 사용자 신규 등록 화면 (User Add)                          | docs/cbl/COUSR01C.md
+COUSR02C | CBL-online | 사용자 정보 수정 화면                                      | docs/cbl/COUSR02C.md
+COUSR03C | CBL-online | 사용자 삭제 (CICS 온라인)                                  | docs/cbl/COUSR03C.md
+CSUTLDTC | CBL-batch  | 날짜 유효성 검증 유틸리티 (CEEDAYS 래퍼)                | docs/cbl/CSUTLDTC.md
+
+# ---- Copybook (CPY) : 30개 ----
+COADM02Y | CPY        | 관리자 메뉴 옵션 테이블                                    | docs/cpy/COADM02Y.md
+COCOM01Y | CPY        | CardDemo 전역 세션 COMMAREA                                | docs/cpy/COCOM01Y.md
+CODATECN | CPY        | 날짜 형식 변환 파라미터 레코드                            | docs/cpy/CODATECN.md
+COMEN02Y | CPY        | 일반 사용자 메인 메뉴 옵션 테이블                        | docs/cpy/COMEN02Y.md
+COSTM01  | CPY        | 명세서용 거래 레코드 레이아웃                            | docs/cpy/COSTM01.md
+COTTL01Y | CPY        | 화면 공통 타이틀 텍스트 상수                              | docs/cpy/COTTL01Y.md
+CSDAT01Y | CPY        | 화면 공통 날짜/시간 표시 구조체                          | docs/cpy/CSDAT01Y.md
+CSLKPCDY | CPY        | 북미 전화 지역번호 / 미국 주 코드 / 주-우편번호 룩업 테이블 | docs/cpy/CSLKPCDY.md
+CSMSG01Y | CPY        | 공통 UI 메시지 텍스트 상수                                | docs/cpy/CSMSG01Y.md
+CSMSG02Y | CPY        | ABEND 루틴 작업 영역 (CABENDD)                            | docs/cpy/CSMSG02Y.md
+CSSETATY | CPY        | BMS 화면 속성 설정 인라인 매크로 (Pseudo-Code Template)  | docs/cpy/CSSETATY.md
+CSSTRPFY | CPY        | AID→PFKey 공통 저장 로직 (인라인 코드 단편)              | docs/cpy/CSSTRPFY.md
+CSUSR01Y | CPY        | 사용자 보안 레코드 레이아웃                              | docs/cpy/CSUSR01Y.md
+CSUTLDPY | CPY        | 날짜 유효성 검증 PROCEDURE DIVISION Copybook            | docs/cpy/CSUTLDPY.md
+CSUTLDWY | CPY        | 날짜 편집·검증 작업영역 Copybook                          | docs/cpy/CSUTLDWY.md
+CUSTREC  | CPY        | 고객 레코드 레이아웃 (명세서 생성 배치 전용)            | docs/cpy/CUSTREC.md
+CVACT01Y | CPY        | 계정 마스터 레코드 레이아웃                              | docs/cpy/CVACT01Y.md
+CVACT02Y | CPY        | 카드 마스터 레코드 레이아웃                              | docs/cpy/CVACT02Y.md
+CVACT03Y | CPY        | 카드/계정/고객 교차참조(CARDXREF) 레코드 레이아웃        | docs/cpy/CVACT03Y.md
+CVCRD01Y | CPY        | 카드 화면 공유 작업 영역 Copybook                        | docs/cpy/CVCRD01Y.md
+CVCUS01Y | CPY        | 고객 마스터 레코드 레이아웃                              | docs/cpy/CVCUS01Y.md
+CVEXPORT | CPY        | 카드데모 멀티 레코드 익스포트 레이아웃                    | docs/cpy/CVEXPORT.md
+CVTRA01Y | CPY        | 거래 카테고리 잔액 레코드                                | docs/cpy/CVTRA01Y.md
+CVTRA02Y | CPY        | 공시그룹 이자율 레코드 레이아웃                          | docs/cpy/CVTRA02Y.md
+CVTRA03Y | CPY        | 거래 유형 레코드 레이아웃                                | docs/cpy/CVTRA03Y.md
+CVTRA04Y | CPY        | 거래 카테고리 레코드 레이아웃                            | docs/cpy/CVTRA04Y.md
+CVTRA05Y | CPY        | 거래 마스터 레코드 레이아웃                              | docs/cpy/CVTRA05Y.md
+CVTRA06Y | CPY        | 일일 거래 레코드 (DALYTRANsaction Record)                | docs/cpy/CVTRA06Y.md
+CVTRA07Y | CPY        | 일일 거래 리포트 출력 레이아웃                            | docs/cpy/CVTRA07Y.md
+UNUSED1Y | CPY        | 미사용 사용자 자격증명 레이아웃 (더미/예비 레코드)      | docs/cpy/UNUSED1Y.md
+
+# ---- 배치 잡 JCL (JCL) : 38개 ----
+ACCTFILE | JCL        | 계정 마스터 VSAM 파일 삭제·정의·적재 잡                  | docs/jcl/ACCTFILE.md
+CARDFILE | JCL        | 카드 마스터 VSAM 전체 재구축 잡                          | docs/jcl/CARDFILE.md
+CBADMCDJ | JCL        | CardDemo CICS 리소스 정의 등록 잡                        | docs/jcl/CBADMCDJ.md
+CBEXPORT | JCL        | 고객 데이터 마이그레이션 익스포트 잡                      | docs/jcl/CBEXPORT.md
+CBIMPORT | JCL        | 다중 레코드 익스포트 파일 분할 임포트 잡                  | docs/jcl/CBIMPORT.md
+CLOSEFIL | JCL        | CICS VSAM 파일 닫기 잡                                    | docs/jcl/CLOSEFIL.md
+COMBTRAN | JCL        | 거래 파일 병합·정렬 및 VSAM 마스터 반영                  | docs/jcl/COMBTRAN.md
+CREASTMT | JCL        | 카드 명세서(Statement) 생성 배치 잡                      | docs/jcl/CREASTMT.md
+CUSTFILE | JCL        | 고객 마스터 VSAM 파일 정의·적재 잡                        | docs/jcl/CUSTFILE.md
+DALYREJS | JCL        | 일일 거절 거래 GDG 정의 잡                                | docs/jcl/DALYREJS.md
+DEFCUST  | JCL        | 고객 VSAM 파일 정의 잡                                    | docs/jcl/DEFCUST.md
+DEFGDGB  | JCL        | GDG 베이스 정의 잡                                        | docs/jcl/DEFGDGB.md
+DEFGDGD  | JCL        | DB2 참조 데이터 GDG 베이스 정의 및 최초 세대 적재 잡      | docs/jcl/DEFGDGD.md
+DISCGRP  | JCL        | 디스클로저 그룹(이자율) VSAM 파일 초기 적재              | docs/jcl/DISCGRP.md
+DUSRSECJ | JCL        | 사용자 보안 파일 초기 구축 잡                            | docs/jcl/DUSRSECJ.md
+ESDSRRDS | JCL        | 사용자 보안 파일 초기 생성 (ESDS·RRDS)                  | docs/jcl/ESDSRRDS.md
+FTPJCL   | JCL        | FTP 파일 전송 JCL                                          | docs/jcl/FTPJCL.md
+INTCALC  | JCL        | 이자 계산 배치 잡                                          | docs/jcl/INTCALC.md
+INTRDRJ1 | JCL        | 내부 리더(INTRDR)를 통한 연쇄 잡 제출기                  | docs/jcl/INTRDRJ1.md
+INTRDRJ2 | JCL        | IMS DemoDB/DemoDX VSAM 물리 파일 생성 잡                | docs/jcl/INTRDRJ2.md
+OPENFIL  | JCL        | CICS VSAM 파일 재오픈 잡                                  | docs/jcl/OPENFIL.md
+POSTTRAN | JCL        | 일일 거래 입력(Posting) 배치 잡                          | docs/jcl/POSTTRAN.md
+PRTCATBL | JCL        | 거래 카테고리 잔액 파일 언로드 및 정렬 출력              | docs/jcl/PRTCATBL.md
+READACCT | JCL        | 계정 마스터 읽기 및 다중 포맷 덤프 잡                    | docs/jcl/READACCT.md
+READCARD | JCL        | 카드 마스터 파일 순차 읽기/덤프 잡                        | docs/jcl/READCARD.md
+READCUST | JCL        | 고객 마스터 파일 읽기/덤프 잡                            | docs/jcl/READCUST.md
+READXREF | JCL        | 카드 교차참조 파일 읽기·덤프 잡                          | docs/jcl/READXREF.md
+REPTFILE | JCL        | 거래 리포트 파일 GDG 기반 정의                            | docs/jcl/REPTFILE.md
+TCATBALF | JCL        | 거래 카테고리 잔액 VSAM 파일 초기 적재                    | docs/jcl/TCATBALF.md
+TRANBKP  | JCL        | 거래 마스터 백업 및 VSAM 재초기화 잡                      | docs/jcl/TRANBKP.md
+TRANCATG | JCL        | 거래 카테고리 VSAM KSDS 정의 및 초기 적재 잡            | docs/jcl/TRANCATG.md
+TRANFILE | JCL        | 거래 마스터 VSAM KSDS 초기 적재 잡                        | docs/jcl/TRANFILE.md
+TRANIDX  | JCL        | 거래 마스터 대체 인덱스(AIX) 정의 잡                      | docs/jcl/TRANIDX.md
+TRANREPT | JCL        | 거래 상세 리포트 생성 잡                                  | docs/jcl/TRANREPT.md
+TRANTYPE | JCL        | 거래 유형 VSAM 파일 초기 적재                            | docs/jcl/TRANTYPE.md
+TXT2PDF1 | JCL        | 텍스트 파일을 PDF로 변환                                  | docs/jcl/TXT2PDF1.md
+WAITSTEP | JCL        | 지정 시간 대기 유틸리티 잡                                | docs/jcl/WAITSTEP.md
+XREFFILE | JCL        | 카드 교차참조(CARDXREF) VSAM 파일 초기 적재 잡          | docs/jcl/XREFFILE.md

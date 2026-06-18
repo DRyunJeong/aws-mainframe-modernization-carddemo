@@ -1,0 +1,339 @@
+================================================================================
+ CardDemo 의존성 관계 맵 (Dependency Relationship Map)
+ 생성일: 2026-06-18
+ 근거: docs/cbl·cpy·jcl 99개 문서의 '## 의존성' 섹션 + 에이전트 메모리 + 소스 교차검증
+ 표기: A → B  (A가 B를 참조/호출/사용)
+       (표준)  = IBM 제공 시스템 카피북/유틸리티 (DFHAID, DFHBMSCA, IDCAMS 등)
+       (추측)  = 소스로 확정하지 못하고 정황으로 추정한 항목
+       R=읽기(READ), W=쓰기(WRITE/REWRITE/DELETE), I-O=읽고씀
+================================================================================
+
+
+================================================================================
+ [1] 프로그램 → COPY 카피북
+================================================================================
+
+--- CICS 온라인 프로그램(CO*) 공통 표준 세트 ---
+  거의 모든 CO* 화면은 다음을 COPY한다(아래 개별 목록에서는 중복을 줄이기 위해
+  "+공통세트"로 축약):
+    공통세트 = COCOM01Y(commarea) + COTTL01Y(타이틀) + CSDAT01Y(날짜/시간)
+              + CSMSG01Y(메시지) + DFHAID(표준) + DFHBMSCA(표준)
+
+COSGN00C → 공통세트 + COSGN00(BMS맵) + CSUSR01Y
+COMEN01C → 공통세트 + COMEN01(BMS맵) + COMEN02Y(메뉴테이블) + CSUSR01Y
+COADM01C → 공통세트 + COADM01(BMS맵) + COADM02Y(메뉴테이블) + CSUSR01Y
+COACTVWC → 공통세트 + COACTVW(BMS맵) + CVCRD01Y + CSMSG02Y + CSUSR01Y + CSSTRPFY
+           + CVACT01Y + CVACT02Y + CVACT03Y + CVCUS01Y
+COACTUPC → 공통세트 + COACTUP(BMS맵) + CVCRD01Y + CSMSG02Y + CSUSR01Y
+           + CSLKPCDY + CSUTLDWY + CSUTLDPY + CSSETATY + CSSTRPFY
+           + CVACT01Y + CVACT03Y + CVCUS01Y
+COCRDLIC → 공통세트 + COCRDLI(BMS맵) + CVCRD01Y + CSUSR01Y + CSSTRPFY + CVACT02Y
+COCRDSLC → 공통세트 + COCRDSL(BMS맵) + CVCRD01Y + CSMSG02Y + CSUSR01Y + CSSTRPFY
+           + CVACT02Y + CVCUS01Y
+COCRDUPC → 공통세트 + COCRDUP(BMS맵) + CVCRD01Y + CSMSG02Y + CSUSR01Y + CSSTRPFY
+           + CVACT02Y + CVCUS01Y
+COTRN00C → 공통세트 + COTRN00(BMS맵) + CVTRA05Y
+COTRN01C → 공통세트 + COTRN01(BMS맵) + CVTRA05Y
+COTRN02C → 공통세트 + COTRN02(BMS맵) + CVTRA05Y + CVACT01Y(추측:미사용) + CVACT03Y
+COBIL00C → 공통세트 + COBIL00(BMS맵) + CVACT01Y + CVACT03Y + CVTRA05Y
+CORPT00C → 공통세트 + CORPT00(BMS맵) + CVTRA05Y(COPY만, 직접참조 없음)
+COUSR00C → 공통세트 + COUSR00(BMS맵) + CSUSR01Y
+COUSR01C → 공통세트 + COUSR01(BMS맵) + CSUSR01Y
+COUSR02C → 공통세트 + COUSR02(BMS맵) + CSUSR01Y
+COUSR03C → 공통세트 + COUSR03(BMS맵) + CSUSR01Y
+
+--- 배치 프로그램(CB*) 및 유틸리티 ---
+CBACT01C → CVACT01Y + CODATECN
+CBACT02C → CVACT02Y
+CBACT03C → CVACT03Y
+CBACT04C → CVTRA01Y + CVACT03Y + CVTRA02Y + CVACT01Y + CVTRA05Y
+CBCUS01C → CVCUS01Y
+CBTRN01C → CVTRA06Y + CVTRA05Y + CVACT03Y + CVACT02Y + CVACT01Y + CVCUS01Y
+CBTRN02C → CVTRA06Y + CVTRA05Y + CVACT03Y + CVACT01Y + CVTRA01Y
+CBTRN03C → CVTRA05Y + CVACT03Y + CVTRA03Y + CVTRA04Y + CVTRA07Y
+CBSTM03A → COSTM01 + CVACT03Y + CUSTREC + CVACT01Y
+CBSTM03B → (COPY 없음 — FD 레이아웃 인라인 정의, 해석은 호출측 CBSTM03A의 카피북에 의존)
+CBEXPORT → CVCUS01Y + CVACT01Y + CVACT03Y + CVTRA05Y + CVACT02Y + CVEXPORT
+CBIMPORT → CVEXPORT + CVCUS01Y + CVACT01Y + CVACT03Y + CVTRA05Y + CVACT02Y
+COBSWAIT → (COPY 없음)
+CSUTLDTC → (COPY 없음)
+
+--- 카피북이 다른 카피북을 COPY (중첩) ---
+CSUTLDPY → CSUTLDWY   (날짜 검증 PROCEDURE 단편이 짝 작업영역 카피북을 요구)
+  ※ 그 외 모든 카피북은 중첩 COPY 없음(데이터/코드 단편 정의 전용).
+
+
+================================================================================
+ [2] 프로그램 → 호출 프로그램 (CALL / XCTL / LINK)
+================================================================================
+
+--- 온라인 화면 전환 (EXEC CICS XCTL = 제어 이전, 복귀 없음) ---
+  로그인/메뉴 라우팅:
+COSGN00C → COADM01C        (인증 성공 & 사용자타입 'A'=admin)
+COSGN00C → COMEN01C        (인증 성공 & 일반 사용자 'U')
+
+COMEN01C → COSGN00C        (EIBCALEN=0 또는 PF3 복귀)
+COMEN01C → COACTVWC        (옵션1)
+COMEN01C → COACTUPC        (옵션2)
+COMEN01C → COCRDLIC        (옵션3)
+COMEN01C → COCRDSLC        (옵션4)
+COMEN01C → COCRDUPC        (옵션5)
+COMEN01C → COTRN00C        (옵션6)
+COMEN01C → COTRN01C        (옵션7)
+COMEN01C → COTRN02C        (옵션8)
+COMEN01C → CORPT00C        (옵션9)
+COMEN01C → COBIL00C        (옵션10)
+COMEN01C → COPAUS0C        (옵션11, 옵션 모듈; INQUIRE PROGRAM으로 설치 확인 후)
+
+COADM01C → COSGN00C        (EIBCALEN=0 또는 PF3)
+COADM01C → COUSR00C        (옵션1)
+COADM01C → COUSR01C        (옵션2)
+COADM01C → COUSR02C        (옵션3)
+COADM01C → COUSR03C        (옵션4)
+COADM01C → COTRTLIC        (옵션5, DB2 옵션 모듈)
+COADM01C → COTRTUPC        (옵션6, DB2 옵션 모듈)
+
+  화면 간 이동/복귀:
+COCRDLIC → COMEN01C(PF3) / COCRDSLC(행 'S' 선택) / COCRDUPC(행 'U' 선택)
+COCRDSLC → COCRDLIC 또는 COMEN01C   (PF3 복귀; CDEMO-TO-PROGRAM 동적)
+COCRDUPC → COMEN01C 또는 CDEMO-FROM-PROGRAM(예: COCRDLIC)  (PF3 복귀)
+COACTVWC → COMEN01C(PF3) 또는 CDEMO-FROM-PROGRAM(동적 복귀)
+COACTUPC → CDEMO-TO-PROGRAM(복귀; 기본 COMEN01C)  (PF3 종료)
+COBIL00C → COSGN00C(EIBCALEN=0) / CDEMO-FROM-PROGRAM 또는 COMEN01C(PF3)
+COTRN00C → COTRN01C(행 'S' 선택) / COMEN01C(PF3) / COSGN00C(EIBCALEN=0)
+COTRN01C → COSGN00C(EIBCALEN=0) / CDEMO-FROM-PROGRAM(PF3, 기본 COMEN01C) / COTRN00C(PF5)
+COTRN02C → COSGN00C / COMEN01C / CDEMO-FROM-PROGRAM  (복귀 동적)
+CORPT00C → COMEN01C(PF3) / COSGN00C(EIBCALEN=0)
+COUSR00C → COUSR02C(행 'U') / COUSR03C(행 'D') / COADM01C(PF3) / COSGN00C(EIBCALEN=0)
+COUSR01C → COADM01C(PF3) / COSGN00C(EIBCALEN=0)
+COUSR02C → CDEMO-FROM-PROGRAM 또는 COADM01C / COSGN00C(EIBCALEN=0)
+COUSR03C → CDEMO-FROM-PROGRAM(기본 COADM01C, PF3/PF12) / COSGN00C(EIBCALEN=0)
+
+--- 온라인 정적 서브루틴 호출 (CALL / EXEC CICS LINK) ---
+CORPT00C → CALL CSUTLDTC          (Custom 모드 리포트 시작/종료일 검증)
+COTRN02C → CALL CSUTLDTC          (거래 발생일·처리일 검증, 2회)
+CSUTLDTC → CALL CEEDAYS (표준)    (LE 날짜 API 래퍼)
+COACTUPC → (인라인) CSUTLDPY → CALL CSUTLDTC (날짜 검증 단편이 호출)
+COPAUS1C → EXEC CICS LINK COPAUS2C  (사기표시 2PC; 옵션 모듈, 메모리 [auth_mq_db2_2pc])
+
+--- 배치 CALL (서브루틴/시스템 루틴) ---
+CBSTM03A → CALL CBSTM03B          (범용 파일 I/O 서브루틴; OPEN/READ/CLOSE 위임)
+CBACT01C → CALL COBDATFT (표준,ASM)  (날짜 형식 변환; 소스 미포함)
+WAITSTEP(잡)→ COBSWAIT → CALL MVSWAIT (표준,ASM)  (OS 타이머 대기)
+  ※ 모든 CB* 배치는 복구 불가 오류 시 CALL CEE3ABD (표준, LE 강제 abend) 공통:
+     CBACT01C, CBACT02C, CBACT03C, CBACT04C, CBCUS01C,
+     CBTRN01C, CBTRN02C, CBTRN03C, CBSTM03A, CBEXPORT, CBIMPORT
+
+
+================================================================================
+ [3] 프로그램 → 데이터셋/파일/DB
+================================================================================
+  (CICS 온라인은 CICS DATASET 논리명, 배치는 JCL DD명 기준. DB2/IMS는 옵션 모듈만)
+
+--- 온라인 프로그램 (VSAM, CICS 경유) ---
+COSGN00C → USRSEC(R)
+COMEN01C → (직접 파일 I/O 없음; 메뉴 라우팅만)
+COADM01C → (직접 파일 I/O 없음)
+COACTVWC → CXACAIX(R, 계정ID AIX) → ACCTDAT(R) → CUSTDAT(R)
+COACTUPC → CXACAIX(R) + ACCTDAT(R/W: READ UPDATE→REWRITE) + CUSTDAT(R/W)
+COCRDLIC → CARDDAT(R, STARTBR/READNEXT/READPREV 브라우즈)  [CARDAIX 정의만, 미사용]
+COCRDSLC → CARDDAT(R, 키=카드번호)                          [CARDAIX 미사용]
+COCRDUPC → CARDDAT(R/W: READ UPDATE→REWRITE)               [CARDAIX 미사용]
+COTRN00C → TRANSACT(R, 브라우즈)
+COTRN01C → TRANSACT(R, READ ... UPDATE — 단 REWRITE는 안 함)
+COTRN02C → TRANSACT(R/W: 최대키 조회 후 WRITE) + CXACAIX(R) + CCXREF(R)
+                                                           [ACCTDAT 리터럴만, 미사용]
+COBIL00C → TRANSACT(R/W: 채번 후 WRITE) + ACCTDAT(R/W) + CXACAIX(R)
+CORPT00C → TDQ 'JOBS'(W, 내부리더로 잡 제출) — 직접 파일 I/O 없음
+COUSR00C → USRSEC(R, 브라우즈)
+COUSR01C → USRSEC(W, 신규 WRITE)
+COUSR02C → USRSEC(R/W: READ UPDATE→REWRITE)
+COUSR03C → USRSEC(R/W: READ UPDATE→DELETE)
+
+--- 배치 프로그램 (VSAM/QSAM, DD명) ---
+CBACT01C → ACCTFILE(R) | OUTFILE(W) + ARRYFILE(W) + VBRCFILE(W, 가변길이)
+CBACT02C → CARDFILE(R)
+CBACT03C → XREFFILE(R)
+CBACT04C → TCATBALF(R,드라이빙) + XREFFILE(R) + DISCGRP(R) + ACCTFILE(I-O) + TRANSACT(W)
+CBCUS01C → CUSTFILE(R)
+CBTRN01C → DALYTRAN(R,드라이빙) + CUSTFILE(R) + XREFFILE(R) + CARDFILE(R)
+           + ACCTFILE(R) + TRANFILE(R)
+CBTRN02C → DALYTRAN(R,드라이빙) + XREFFILE(R) + ACCTFILE(I-O) + TCATBALF(I-O)
+           + TRANFILE(W) + DALYREJS(W,거절)
+CBTRN03C → TRANFILE(R,드라이빙) + DATEPARM(R) + CARDXREF(R) + TRANTYPE(R)
+           + TRANCATG(R) + TRANREPT(W,리포트)
+CBSTM03A → STMTFILE(W,텍스트) + HTMLFILE(W,HTML)   [데이터는 CBSTM03B 경유]
+CBSTM03B → TRNXFILE(R) + XREFFILE(R) + CUSTFILE(R) + ACCTFILE(R)   [03A 대행]
+CBEXPORT → CUSTFILE(R)+ACCTFILE(R)+XREFFILE(R)+TRANSACT(R)+CARDFILE(R) | EXPFILE(W)
+CBIMPORT → EXPFILE(R) | CUSTOUT(W)+ACCTOUT(W)+XREFOUT(W)+TRNXOUT(W)+ERROUT(W)
+           [CARDOUT: 프로그램은 OPEN하나 JCL에 DD 누락 — abend 위험]
+COBSWAIT → (파일 없음)
+CSUTLDTC → (파일 없음)
+
+--- DB2 / IMS (옵션 모듈, 참고) ---
+COTRTLIC/COTRTUPC → DB2 테이블 TRANSACTION TYPE (DCLTRTYP)        [DB2 옵션 모듈]
+COPAUA0C/COPAUS0C → IMS HIDAM(PAUTSUM0 루트/PAUTDTL1 자식) + VSAM XREF/ACCT/CUST + MQ
+COPAUS2C → DB2 테이블 CARDDEMO.AUTHFRDS(사기기록, INSERT/UPDATE)  [IMS/DB2/MQ 모듈]
+
+
+================================================================================
+ [4] JCL → 실행 프로그램 / PROC
+================================================================================
+  (PGM = EXEC PGM 직접 실행, PROC = 카탈로그드 프로시저 호출)
+
+--- 사용자 COBOL 프로그램을 실행하는 잡 ---
+POSTTRAN → PGM CBTRN02C            (일일 거래 포스팅)
+INTCALC  → PGM CBACT04C            (이자 계산)
+TRANREPT → PROC REPROC(IDCAMS) + PGM SORT + PGM CBTRN03C   (거래 상세 리포트)
+CREASTMT → PGM IDCAMS + SORT + IEFBR14 + CBSTM03A          (명세서; 03A→03B CALL)
+READACCT → PGM IEFBR14 + CBACT01C  (계정 덤프; CBACT01C→COBDATFT)
+READCARD → PGM CBACT02C            (카드 덤프)
+READCUST → PGM CBCUS01C            (고객 덤프)
+READXREF → PGM CBACT03C            (교차참조 덤프)
+WAITSTEP → PGM COBSWAIT            (대기; COBSWAIT→MVSWAIT)
+
+--- 시스템 유틸리티 전용 잡 (사용자 PGM 없음) ---
+ACCTFILE → PGM IDCAMS (표준)              (DELETE/DEFINE/REPRO 계정 KSDS)
+CARDFILE → PGM SDSF + IDCAMS (표준)       (CICS닫기 + 카드 KSDS+AIX 재구축)
+CUSTFILE → PGM SDSF + IDCAMS (표준)       (고객 KSDS)
+XREFFILE → PGM IDCAMS (표준)              (교차참조 KSDS+AIX)
+TRANFILE → PGM IDCAMS + SDSF (표준)       (거래 KSDS+AIX, CICS 닫기/열기 내장)
+TRANCATG → PGM IDCAMS (표준)              (거래카테고리 KSDS)
+TRANTYPE → PGM IDCAMS (표준)              (거래유형 KSDS)
+DISCGRP  → PGM IDCAMS (표준)              (공시그룹 KSDS)
+TCATBALF → PGM IDCAMS (표준)              (카테고리잔액 KSDS)
+DEFCUST  → PGM IDCAMS (표준)              (고객 KSDS 정의)
+CLOSEFIL → PGM SDSF (표준)                (CICS VSAM 닫기)
+OPENFIL  → PGM SDSF (표준)                (CICS VSAM 열기)
+TRANBKP  → PROC REPROC(IDCAMS) (표준)     (거래 백업 + KSDS 재초기화)
+COMBTRAN → PGM SORT + IDCAMS (표준)       (BKUP+SYSTRAN 병합 → KSDS 적재)
+TRANIDX  → PGM IDCAMS (표준)              (거래 AIX 정의/빌드)
+PRTCATBL → PROC REPROC(IDCAMS) + PGM IEFBR14 + SORT (표준)
+DALYREJS → PGM IDCAMS (표준)              (거절 GDG 정의)
+REPTFILE → PGM IDCAMS (표준)              (리포트 GDG 정의)
+DEFGDGB  → PGM IDCAMS (표준)              (GDG 베이스 6종 정의)
+DEFGDGD  → PGM IDCAMS + IEBGENER (표준)   (참조데이터 GDG 정의+최초세대)
+DUSRSECJ → PGM IEFBR14 + IEBGENER + IDCAMS (표준)  (사용자보안 KSDS)
+ESDSRRDS → PGM IEFBR14 + IEBGENER + IDCAMS (표준)  (사용자보안 ESDS/RRDS)
+CBADMCDJ → PGM DFHCSDUP (표준)            (CICS CSD 리소스 등록)
+CBEXPORT → PGM IDCAMS + CBEXPORT          (익스포트 KSDS 정의 + 익스포트)
+CBIMPORT → PGM CBIMPORT                   (익스포트 분할 임포트)
+INTRDRJ1 → PGM IDCAMS + IEBGENER (표준)   (백업 + 내부리더로 INTRDRJ2 제출)
+INTRDRJ2 → PGM IDCAMS (표준)              (REPRO)
+FTPJCL   → PGM FTP (표준)                 (파일 전송)
+TXT2PDF1 → PGM IKJEFT1B + REXX TXT2PDF (표준)  (명세서 텍스트→PDF)
+
+
+================================================================================
+ [5] JCL 선행/후행 체인 (야간 배치 순서)
+================================================================================
+  근거: 루트 README "Running Batch Jobs" + scripts/run_full_batch.sh
+        + 각 JCL 문서의 선행/후행 기술 + 메모리 [batch_and_optional_modules]
+
+--- 핵심 야간 사이클 (CLOSEFIL 시작 → OPENFIL 끝) ---
+CLOSEFIL
+   → (마스터 갱신) ACCTFILE, CARDFILE, XREFFILE, CUSTFILE, TRANBKP/TRANFILE,
+                  DISCGRP, TCATBALF, TRANTYPE, DUSRSECJ   [상호 독립, 병렬 가능]
+   → POSTTRAN  (CBTRN02C: DALYTRAN 검증·전기 → TRANSACT KSDS 기록, 잔액/카테고리 갱신)
+   → INTCALC   (CBACT04C: 이자 계산 → SYSTRAN(+1) 이자거래 생성, ACCTDATA REWRITE)
+   → TRANBKP   (TRANSACT.VSAM.KSDS → TRANSACT.BKUP(+1) 백업 후 KSDS 재초기화)
+   → COMBTRAN  (SORT: BKUP(0) + SYSTRAN(0) 병합 → COMBINED(+1) → KSDS 재적재)
+   → TRANIDX   (IDCAMS: 재적재된 KSDS에 거래 AIX 재정의/빌드)
+   → OPENFIL   (SDSF: CICS에 VSAM 전체 재오픈 → 온라인 거래 재개)
+
+  ※ run_full_batch.sh 실제 호출 순서(주의: 스크립트는 데이터 리프레시 단계에서
+    "Refresh Transaction Data"에 TRANBKP.jcl을 사용하고, 사이클 후반 백업에도
+    TRANBKP.jcl을 재사용한다 — 동일 잡이 시퀀스에 두 번 등장):
+      CLOSEFIL → ACCTFILE → CARDFILE → XREFFILE → CUSTFILE → TRANBKP → DISCGRP
+      → TCATBALF → TRANTYPE → DUSRSECJ → POSTTRAN → INTCALC → TRANBKP
+      → COMBTRAN → TRANIDX → OPENFIL
+
+--- GDG/리포트 정의 잡 (사이클 전 1회성 선행) ---
+DEFGDGB → (TRANSACT.BKUP/DALY/COMBINED, SYSTRAN, TCATBALF.BKUP, TRANREPT 베이스 정의)
+            ↳ 후행: TRANBKP, COMBTRAN, INTCALC, TRANREPT 등이 (+1)세대 생성/소비
+DEFGDGD → (TRANTYPE/TRANCATG/DISCGRP 참조데이터 GDG 정의+최초세대)
+REPTFILE → TRANREPT GDG 베이스 정의 → 후행 TRANREPT
+DALYREJS → DALYREJS GDG 베이스 정의 → 후행 POSTTRAN(거절 세대 생성)
+
+--- 리포트/명세서 (정규 야간 사이클과 별개, 포스팅 이후 실행) ---
+POSTTRAN → TRANREPT  (CBTRN03C: TRANSACT 기반 거래 상세 리포트; TRANTYPE/TRANCATG 선행 필요)
+(마스터 최신화 후) → CREASTMT  (CBSTM03A/B: 명세서 텍스트+HTML 생성)
+CREASTMT → TXT2PDF1  (STATEMNT.PS → PDF 변환)
+POSTTRAN/INTCALC → PRTCATBL  (TCATBALF 언로드·정렬 리포트; 읽기전용)
+
+--- 익스포트/임포트 체인 (마이그레이션, 정규 사이클과 독립) ---
+CBEXPORT → CBIMPORT   (EXPORT.DATA 생성 → 분할 임포트)
+
+--- 내부리더 연쇄 (IMS 셋업 계열) ---
+INTRDRJ1 → INTRDRJ2   (STEP01 성공 시 JES 내부리더로 자동 제출)
+
+--- 진단 덤프 잡 (독립, 야간 사이클 미포함) ---
+READACCT / READCARD / READCUST / READXREF
+   → 각각 ACCTFILE / CARDFILE / CUSTFILE / XREFFILE 적재 완료 후 단독 실행 가능
+
+--- CICS 설치 (최초 1회) ---
+(COBOL 컴파일·링크 LOADLIB) → CBADMCDJ → (CEDA INSTALL GROUP(CARDDEMO)) → COSGN00C 로그인 가능
+
+
+================================================================================
+ [6] 카피북 → 사용 프로그램 역참조 (주요 레코드 레이아웃)
+================================================================================
+
+CVACT01Y (계정 ACCOUNT-RECORD, ACCTDATA/ACCTFILE/ACCTDAT KSDS 300B)
+   ← CBACT01C, CBACT04C, CBTRN01C, CBTRN02C, CBEXPORT, CBIMPORT, CBSTM03A,
+     COACTVWC, COACTUPC, COBIL00C, COTRN02C(추측:미사용)
+
+CVACT02Y (카드 CARD-RECORD, CARDDATA/CARDFILE/CARDDAT KSDS 150B)
+   ← CBACT02C, CBTRN01C, CBEXPORT, CBIMPORT,
+     COCRDLIC, COCRDSLC, COCRDUPC, COACTVWC
+
+CVACT03Y (교차참조 CARD-XREF-RECORD, CARDXREF/XREFFILE KSDS 50B; AIX=CXACAIX)
+   ← CBACT03C, CBACT04C, CBTRN01C, CBTRN02C, CBTRN03C, CBEXPORT, CBIMPORT,
+     CBSTM03A, COBIL00C, COACTUPC, COACTVWC, COTRN02C, CVEXPORT(재사용)
+
+CVCUS01Y (고객 CUSTOMER-RECORD, CUSTDATA/CUSTFILE KSDS 500B)
+   ← CBCUS01C, CBTRN01C, CBTRN02C, CBEXPORT, CBIMPORT,
+     COACTUPC, COCRDLIC, COCRDSLC, COCRDUPC, COACTVWC
+   ※ CUSTREC = CBSTM03A 전용 동일레이아웃 복사본(필드명 한 글자 차이)
+
+CVTRA05Y (거래 마스터 TRAN-RECORD, TRANSACT/TRANFILE KSDS 350B)
+   ← CBTRN01C, CBTRN02C, CBTRN03C, CBACT04C, CBEXPORT, CBIMPORT,
+     COTRN00C, COTRN01C, COTRN02C, COBIL00C, CORPT00C(COPY만)
+
+CVTRA06Y (일일 거래 DALYTRAN-RECORD, DALYTRAN PS 350B)
+   ← CBTRN01C, CBTRN02C   (TRANFILE 잡이 초기 적재)
+
+CVTRA01Y (카테고리잔액 TRAN-CAT-BAL-RECORD, TCATBALF KSDS 50B)
+   ← CBTRN02C(R/W/REWRITE), CBACT04C(R, 드라이빙)
+
+CVTRA02Y (공시그룹 DIS-GROUP-RECORD, DISCGRP KSDS 50B, 이자율 마스터)
+   ← CBACT04C
+
+CVTRA03Y (거래유형 TRAN-TYPE-RECORD, TRANTYPE KSDS 60B)
+   ← CBTRN03C   (COTRTLIC/COTRTUPC는 자체 인메모리 테이블, 직접 COPY 안 함)
+
+CVTRA04Y (거래카테고리 TRAN-CAT-RECORD, TRANCATG KSDS 60B)
+   ← CBTRN03C
+
+CVTRA07Y (거래 리포트 출력 레이아웃, TRANREPT PS 133B)
+   ← CBTRN03C
+
+CSUSR01Y (사용자보안 SEC-USER-DATA, USRSEC KSDS 80B)
+   ← COSGN00C, COUSR00C, COUSR01C, COUSR02C, COUSR03C,
+     COMEN01C(COPY만), COADM01C(COPY만)
+
+COCOM01Y (전역 commarea CARDDEMO-COMMAREA) ← 모든 CO* 온라인 프로그램(17개)
+CVCRD01Y (카드화면 공용 작업영역 CC-WORK-AREA)
+   ← COCRDLIC, COCRDSLC, COCRDUPC, COACTUPC, COACTVWC
+COSTM01  (명세서 거래 TRNX-RECORD, TRNXFILE KSDS 350B) ← CBSTM03A
+CVEXPORT (멀티레코드 익스포트 EXPORT-RECORD 500B)      ← CBEXPORT, CBIMPORT
+CODATECN (날짜변환 파라미터)                           ← CBACT01C
+CSUTLDWY (날짜검증 작업영역)                           ← CSUTLDPY(중첩), COACTUPC(경유)
+CSUTLDPY (날짜검증 PROCEDURE 단편)                     ← COACTUPC
+CSLKPCDY (전화/주/우편 룩업)                           ← COACTUPC
+CSSTRPFY (PF키 저장 단편)         ← COCRDLIC, COCRDSLC, COCRDUPC, COACTUPC, COACTVWC
+CSSETATY (BMS 속성 설정 단편)     ← COACTUPC (REPLACING 전개)
+CSMSG02Y (ABEND 작업영역)         ← COACTUPC, COACTVWC, COCRDSLC, COCRDUPC,
+                                    COTRTUPC/COPAUS1C/COPAUS0C(옵션 모듈)
+                                    [COCRDLIC은 주석 처리됨]
+UNUSED1Y (미사용 자격증명 레이아웃) ← (사용 프로그램 없음 — 코드베이스 전체에서 미참조)
