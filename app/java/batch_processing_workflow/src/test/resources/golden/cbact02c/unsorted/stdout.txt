@@ -1,0 +1,5 @@
+START OF EXECUTION OF PROGRAM CBACT02C
+222200000000000200000000002222ALPHA NAME                                        2029-12-31Y                                                           
+555500000000000500000000005555BETA NAME                                         2031-06-30N                                                           
+777700000000000700000000007777GAMMA NAME                                        2030-01-01Y                                                           
+END OF EXECUTION OF PROGRAM CBACT02C
